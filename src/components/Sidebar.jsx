@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 
 const Sidebar = () => {
   return (
@@ -7,19 +7,34 @@ const Sidebar = () => {
       <h2 className="text-2xl font-bold mb-8">Admin Dashboard</h2>
       <ul>
         <li className="mb-4">
-          <Link to="/" className="hover:text-gray-400">Dashboard</Link>
+          <Link to="/" className="hover:text-gray-400">
+            Dashboard
+          </Link>
         </li>
         <li className="mb-4">
-          <Link to="/barbers" className="hover:text-gray-400">Barbers</Link>
+          <Link to="/barbers" className="hover:text-gray-400">
+            Barbers
+          </Link>
         </li>
         <li className="mb-4">
-          <Link to="/services" className="hover:text-gray-400">Services</Link>
+          <Link to="/services" className="hover:text-gray-400">
+            Services
+          </Link>
         </li>
         <li className="mb-4">
-          <Link to="/appointments" className="hover:text-gray-400">Appointments</Link>
+          <Link to="/appointments" className="hover:text-gray-400">
+            Appointments
+          </Link>
         </li>
         <li className="mb-4">
-          <Link to="/payments" className="hover:text-gray-400">Payments</Link>
+          <Link to="/payments" className="hover:text-gray-400">
+            Payments
+          </Link>
+        </li>
+        <li className="mb-4">
+          <Link to="/voucher" className="hover:text-gray-400">
+            VoucherManagement
+          </Link>
         </li>
       </ul>
     </div>

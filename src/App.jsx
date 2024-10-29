@@ -7,6 +7,7 @@ import BarberList from './pages/BarberList';
 import ServiceList from './pages/ServiceList';
 import AppointmentList from './pages/AppointmentList';
 import PaymentList from './pages/PaymentList';
+import VoucherManagement from './components/VoucherManagement';
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
             <Route path="/services" element={<ServiceList />} />
             <Route path="/appointments" element={<AppointmentList />} />
             <Route path="/payments" element={<PaymentList />} />
+            <Route path="/voucher" element={<VoucherManagement />} />
           </Routes>
         </div>
       </div>

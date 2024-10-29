@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { fetchBarbers, createBarber, deleteBarber } from '../api/barberApi';
+import React, { useEffect, useState } from "react";
+import { fetchBarbers, createBarber, deleteBarber } from "../api/barberApi";
 
 const Barbers = () => {
   const [barbers, setBarbers] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [newBarber, setNewBarber] = useState({
-    name: '',
-    email:'',
-    description: '',
-    specialty: '',
-    image: ''
+    name: "",
+    email: "",
+    description: "",
+    specialty: "",
+    image: "",
   });
 
   useEffect(() => {
@@ -30,10 +30,16 @@ const Barbers = () => {
     try {
       const addedBarber = await createBarber(newBarber);
       setBarbers([...barbers, addedBarber]);
-      setShowForm(false);  
-      setNewBarber({ name: '',email:'', description: '', specialty: '', image: '' });  // Reset the form
+      setShowForm(false);
+      setNewBarber({
+        name: "",
+        email: "",
+        description: "",
+        specialty: "",
+        image: "",
+      }); // Reset the form
     } catch (error) {
-      console.error('Error adding barber:', error);
+      console.error("Error adding barber:", error);
     }
   };
 
@@ -42,79 +48,119 @@ const Barbers = () => {
       await deleteBarber(id);
       setBarbers(barbers.filter((barber) => barber._id !== id));
     } catch (error) {
-      console.error('Error deleting barber:', error);
+      console.error("Error deleting barber:", error);
     }
   };
-
+  const handleStatusChange = async (id, newStatus) => {
+    try {
+      await fetch(`https://ma-ney3.onrender.com/api/barbers/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: newStatus }),
+      });
+  
+      setBarbers((prevBarbers) =>
+        prevBarbers.map((barber) =>
+          barber._id === id ? { ...barber, status: newStatus } : barber
+        )
+      );
+    } catch (error) {
+      console.error('Error updating status:', error);
+    }
+  };
+  
   return (
     <div>
       <h2 className="text-2xl font-bold mb-4">Barbers ({barbers.length})</h2>
-      
-      <button 
+
+      <button
         onClick={() => setShowForm(!showForm)}
         className="mb-4 px-4 py-2 bg-blue-600 text-white rounded"
       >
-        {showForm ? 'Cancel' : 'Add New Barber'}
+        {showForm ? "Cancel" : "Add New Barber"}
       </button>
 
       {showForm && (
-        <form onSubmit={handleSubmit} className="mb-4 p-4 border rounded bg-gray-100">
+        <form
+          onSubmit={handleSubmit}
+          className="mb-4 p-4 border rounded bg-gray-100"
+        >
           <div className="mb-4">
             <label className="block text-sm font-bold mb-2">Name</label>
-            <input 
-              type="text" 
-              name="name" 
-              value={newBarber.name} 
-              onChange={handleInputChange} 
+            <input
+              type="text"
+              name="name"
+              value={newBarber.name}
+              onChange={handleInputChange}
               className="w-full p-2 border rounded"
-              required 
+              required
             />
           </div>
           <div className="mb-4">
-    <label className="block text-sm font-bold mb-2">Email</label>
-    <input 
-      type="email" 
-      name="email" 
-      value={newBarber.email} 
-      onChange={handleInputChange} 
-      className="w-full p-2 border rounded"
-      required 
-    />
-  </div>
+            <label className="block text-sm font-bold mb-2">Email</label>
+            <input
+              type="email"
+              name="email"
+              value={newBarber.email}
+              onChange={handleInputChange}
+              className="w-full p-2 border rounded"
+              required
+            />
+          </div>
           <div className="mb-4">
             <label className="block text-sm font-bold mb-2">Description</label>
-            <input 
-              type="text" 
-              name="description" 
-              value={newBarber.description} 
-              onChange={handleInputChange} 
+            <input
+              type="text"
+              name="description"
+              value={newBarber.description}
+              onChange={handleInputChange}
               className="w-full p-2 border rounded"
-              required 
+              required
             />
           </div>
           <div className="mb-4">
             <label className="block text-sm font-bold mb-2">Specialty</label>
-            <input 
-              type="text" 
-              name="specialty" 
-              value={newBarber.specialty} 
-              onChange={handleInputChange} 
+            <input
+              type="text"
+              name="specialty"
+              value={newBarber.specialty}
+              onChange={handleInputChange}
               className="w-full p-2 border rounded"
-              required 
+              required
             />
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-bold mb-2">Image URL</label>
-            <input 
-              type="text" 
-              name="image" 
-              value={newBarber.image} 
-              onChange={handleInputChange} 
+            <label className="block text-sm font-bold mb-2">Status</label>
+            <select
+              name="status"
+              value={newBarber.status}
+              onChange={handleInputChange}
               className="w-full p-2 border rounded"
-              required 
+              required
+            >
+              <option value="Available">Available</option>
+              <option value="Unavailable">Unavailable</option>
+            </select>
+          </div>
+          <div className="mb-4">
+            <label className="block text-sm font-bold mb-2">Image URL</label>
+            <input
+              type="text"
+              name="image"
+              value={newBarber.image}
+              onChange={handleInputChange}
+              className="w-full p-2 border rounded"
+              required
             />
           </div>
-          <button type="submit" className="px-4 py-2 bg-green-600 text-white rounded">Add Barber</button>
+          <button
+            type="submit"
+            className="px-4 py-2 bg-green-600 text-white rounded"
+          >
+            Add Barber
+          </button>
         </form>
       )}
 
@@ -127,7 +173,8 @@ const Barbers = () => {
               <th className="py-2 px-4 border-b text-left">Email</th>
               <th className="py-2 px-4 border-b text-left">Description</th>
               <th className="py-2 px-4 border-b text-left">Specialty</th>
-              <th className="py-2 px-4 border-b text-left">Actions</th> 
+              <th className="py-2 px-4 border-b text-left">Status</th>
+              <th className="py-2 px-4 border-b text-left">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -146,8 +193,25 @@ const Barbers = () => {
                 </td>
                 <td className="py-2 px-4 border-b text-left">{barber.name}</td>
                 <td className="py-2 px-4 border-b text-left">{barber.email}</td>
-                <td className="py-2 px-4 border-b text-left">{barber.description}</td>
-                <td className="py-2 px-4 border-b text-left">{barber.specialty}</td>
+                <td className="py-2 px-4 border-b text-left">
+                  {barber.description}
+                </td>
+                <td className="py-2 px-4 border-b text-left">
+                  {barber.specialty}
+                </td>
+                <td className="py-2 px-4 border-b text-left">
+                  <select
+                    value={barber.status}
+                    onChange={(e) =>
+                      handleStatusChange(barber._id, e.target.value)
+                    }
+                    className="p-2 border rounded"
+                  >
+                    <option value="Available">Available</option>
+                    <option value="Unavailable">Unavailable</option>
+                  </select>
+                </td>
+
                 <td className="py-2 px-4 border-b text-left">
                   <button
                     onClick={() => handleDelete(barber._id)}
