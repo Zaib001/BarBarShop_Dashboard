@@ -10,6 +10,12 @@ const Barbers = () => {
     description: "",
     specialty: "",
     image: "",
+    status: "Available",
+    availability: [], // Added availability field
+  });
+  const [newAvailability, setNewAvailability] = useState({
+    day: "",
+    times: "",
   });
 
   useEffect(() => {
@@ -25,6 +31,23 @@ const Barbers = () => {
     setNewBarber({ ...newBarber, [e.target.name]: e.target.value });
   };
 
+  const handleAvailabilityChange = (e) => {
+    setNewAvailability({ ...newAvailability, [e.target.name]: e.target.value });
+  };
+
+  const addAvailability = () => {
+    if (newAvailability.day && newAvailability.times) {
+      setNewBarber((prevBarber) => ({
+        ...prevBarber,
+        availability: [
+          ...prevBarber.availability,
+          { ...newAvailability, times: newAvailability.times.split(",") },
+        ],
+      }));
+      setNewAvailability({ day: "", times: "" }); // Reset the input fields
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -37,6 +60,8 @@ const Barbers = () => {
         description: "",
         specialty: "",
         image: "",
+        status: "Available",
+        availability: [],
       }); // Reset the form
     } catch (error) {
       console.error("Error adding barber:", error);
@@ -51,26 +76,27 @@ const Barbers = () => {
       console.error("Error deleting barber:", error);
     }
   };
-  const handleStatusChange = async (id, newStatus) => {
+
+  const handleUpdateBarber = async (id, updates) => {
     try {
-      await fetch(`https://ma-ney3.onrender.com/api/barbers/${id}`, {
+      await fetch(`https://ma-1.onrender.com/api/barbers/${id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ status: newStatus }),
+        body: JSON.stringify(updates),
       });
-  
+
       setBarbers((prevBarbers) =>
         prevBarbers.map((barber) =>
-          barber._id === id ? { ...barber, status: newStatus } : barber
+          barber._id === id ? { ...barber, ...updates } : barber
         )
       );
     } catch (error) {
-      console.error('Error updating status:', error);
+      console.error('Error updating barber:', error);
     }
   };
-  
+
   return (
     <div>
       <h2 className="text-2xl font-bold mb-4">Barbers ({barbers.length})</h2>
@@ -155,6 +181,44 @@ const Barbers = () => {
               required
             />
           </div>
+          <div className="mb-4">
+            <label className="block text-sm font-bold mb-2">Add Availability</label>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                name="day"
+                placeholder="Day (e.g., Monday)"
+                value={newAvailability.day}
+                onChange={handleAvailabilityChange}
+                className="w-1/3 p-2 border rounded"
+              />
+              <input
+                type="text"
+                name="times"
+                placeholder="Times (comma-separated, e.g., 9:00 AM, 10:00 AM)"
+                value={newAvailability.times}
+                onChange={handleAvailabilityChange}
+                className="w-2/3 p-2 border rounded"
+              />
+              <button
+                type="button"
+                onClick={addAvailability}
+                className="px-4 py-2 bg-gray-500 text-white rounded"
+              >
+                Add
+              </button>
+            </div>
+          </div>
+          <div className="mb-4">
+            <label className="block text-sm font-bold mb-2">Current Availability</label>
+            <ul className="list-disc pl-5">
+              {newBarber.availability.map((slot, index) => (
+                <li key={index}>
+                  {slot.day}: {slot.times.join(", ")}
+                </li>
+              ))}
+            </ul>
+          </div>
           <button
             type="submit"
             className="px-4 py-2 bg-green-600 text-white rounded"
@@ -211,7 +275,6 @@ const Barbers = () => {
                     <option value="Unavailable">Unavailable</option>
                   </select>
                 </td>
-
                 <td className="py-2 px-4 border-b text-left">
                   <button
                     onClick={() => handleDelete(barber._id)}

@@ -36,9 +36,9 @@ const Dashboard = () => {
     const loadCounts = async () => {
       try {
         const [barbers, services, stats] = await Promise.all([
-          axios.get('https://ma-ney3.onrender.com/api/barbers'),
-          axios.get('https://ma-ney3.onrender.com/api/services'),
-          axios.get('https://ma-ney3.onrender.com/api/appointments/stats'),
+          axios.get('https://ma-1.onrender.com/api/barbers'),
+          axios.get('https://ma-1.onrender.com/api/services'),
+          axios.get('https://ma-1.onrender.com/api/appointments/stats'),
         ]);
 
         setBarbersCount(barbers.data.length);

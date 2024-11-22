@@ -14,7 +14,7 @@ const VoucherManagement = () => {
   useEffect(() => {
     const fetchVouchers = async () => {
       try {
-        const response = await axios.get("https://ma-ney3.onrender.com/api/vouchers");
+        const response = await axios.get("https://ma-1.onrender.com/api/vouchers");
         setVouchers(response.data);
       } catch (error) {
         console.error("Error fetching vouchers:", error);
@@ -33,7 +33,7 @@ const VoucherManagement = () => {
   const createVoucher = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("https://ma-ney3.onrender.com/api/vouchers", newVoucher);
+      const response = await axios.post("https://ma-1.onrender.com/api/vouchers", newVoucher);
       setVouchers([...vouchers, response.data]);
       setShowForm(false); // Hide the form after submission
       setNewVoucher({ code: "", discount: 0, expirationDate: "" }); // Reset the form
@@ -45,7 +45,7 @@ const VoucherManagement = () => {
   // Delete a voucher
   const deleteVoucher = async (id) => {
     try {
-      await axios.delete(`https://ma-ney3.onrender.com/api/vouchers/${id}`);
+      await axios.delete(`https://ma-1.onrender.com/api/vouchers/${id}`);
       setVouchers(vouchers.filter((voucher) => voucher._id !== id));
     } catch (error) {
       console.error("Error deleting voucher:", error);
